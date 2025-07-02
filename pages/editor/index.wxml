@@ -1,0 +1,147 @@
+<!--pages/editor/index.wxml-->
+<view class="container">
+  <!-- 页面头部 -->
+  <view class="header">
+    <view class="header-content">
+      <view class="header-left">
+        <text class="page-title">SQL编辑器</text>
+        <text class="database-name">{{databaseInfo.name}}</text>
+      </view>
+      <view class="header-actions">
+        <button class="btn btn-secondary header-btn" bindtap="toggleSchema">
+          <text class="btn-icon">📋</text>
+          表结构
+        </button>
+        <button class="btn btn-secondary header-btn" bindtap="onShareSQL">
+          <text class="btn-icon">📤</text>
+          分享
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 表结构面板 -->
+  <view class="schema-panel" wx:if="{{showSchema}}">
+    <view class="schema-header">
+      <text class="schema-title">数据库表结构</text>
+      <text class="schema-close" bindtap="toggleSchema">×</text>
+    </view>
+    <scroll-view class="schema-content" scroll-y="true">
+      <view 
+        class="table-schema" 
+        wx:for="{{tableSchema}}" 
+        wx:key="table"
+      >
+        <view class="table-name" data-table="{{item.table}}" bindtap="insertTableName">
+          <text class="table-icon">📊</text>
+          <text class="table-text">{{item.table}}</text>
+          <text class="insert-hint">点击插入</text>
+        </view>
+        <view class="columns-list">
+          <view 
+            class="column-item" 
+            wx:for="{{item.columns}}" 
+            wx:for-item="column" 
+            wx:key="name"
+          >
+            <text class="column-name">{{column.name}}</text>
+            <text class="column-type">{{column.type}}</text>
+            <text class="column-constraints">
+              <text wx:if="{{column.primary}}" class="constraint primary">PK</text>
+              <text wx:if="{{!column.nullable}}" class="constraint not-null">NOT NULL</text>
+            </text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 主要内容区域 -->
+  <view class="main-content">
+    <!-- SQL编辑器 -->
+    <view class="editor-section">
+      <view class="section-header">
+        <text class="section-title">SQL编辑器</text>
+        <view class="section-actions">
+          <button class="btn btn-secondary action-btn" bindtap="onFormatSQL">
+            <text class="action-icon">⚡</text>
+            格式化
+          </button>
+        </view>
+      </view>
+      
+      <sql-editor 
+        class="sql-editor-component"
+        value="{{sqlText}}"
+        placeholder="请输入SQL语句..."
+        height="300rpx"
+        bindinput="onSqlInput"
+        bindexecute="onExecuteSQL"
+      />
+    </view>
+
+    <!-- 执行结果 -->
+    <view class="result-section">
+      <view class="section-header">
+        <text class="section-title">执行结果</text>
+        <view class="section-actions">
+          <button 
+            class="btn btn-secondary action-btn" 
+            bindtap="onClearResult"
+            wx:if="{{result || error}}"
+          >
+            <text class="action-icon">🗑️</text>
+            清空
+          </button>
+        </view>
+      </view>
+      
+      <result-viewer 
+        class="result-viewer-component"
+        result="{{result}}"
+        loading="{{loading}}"
+        error="{{error}}"
+        bindclear="onClearResult"
+      />
+    </view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="quick-actions">
+    <view class="quick-actions-title">快捷操作</view>
+    <view class="quick-actions-grid">
+      <button 
+        class="quick-action-btn" 
+        data-sql="SELECT * FROM users;"
+        bindtap="onQuickAction"
+      >
+        <text class="quick-action-icon">👥</text>
+        <text class="quick-action-text">查询用户</text>
+      </button>
+      <button 
+        class="quick-action-btn" 
+        data-sql="SELECT * FROM orders;"
+        bindtap="onQuickAction"
+      >
+        <text class="quick-action-icon">📦</text>
+        <text class="quick-action-text">查询订单</text>
+      </button>
+      <button 
+        class="quick-action-btn" 
+        data-sql="SELECT COUNT(*) as total FROM users;"
+        bindtap="onQuickAction"
+      >
+        <text class="quick-action-icon">📊</text>
+        <text class="quick-action-text">统计数量</text>
+      </button>
+      <button 
+        class="quick-action-btn" 
+        data-sql="SELECT u.name, o.product_name FROM users u JOIN orders o ON u.id = o.user_id;"
+        bindtap="onQuickAction"
+      >
+        <text class="quick-action-icon">🔗</text>
+        <text class="quick-action-text">关联查询</text>
+      </button>
+    </view>
+  </view>
+</view>

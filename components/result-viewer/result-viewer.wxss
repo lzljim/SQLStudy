@@ -1,0 +1,283 @@
+/* components/result-viewer/result-viewer.wxss */
+
+.result-viewer {
+  background: #fff;
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 加载状态 */
+.loading-container {
+  padding: 80rpx 40rpx;
+  text-align: center;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #6c757d;
+}
+
+.loading-icon {
+  font-size: 48rpx;
+  margin-bottom: 16rpx;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  font-size: 28rpx;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 错误状态 */
+.error-container {
+  padding: 40rpx;
+}
+
+.error-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.error-icon {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+}
+
+.error-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #dc3545;
+}
+
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 16rpx;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  margin-bottom: 24rpx;
+  border: 1rpx solid #f5c6cb;
+}
+
+.error-actions {
+  text-align: center;
+}
+
+/* 成功状态 */
+.success-container {
+  padding: 24rpx;
+}
+
+/* 统计信息 */
+.stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 16rpx 0;
+  margin-bottom: 24rpx;
+  background: #f8f9fa;
+  border-radius: 8rpx;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #6c757d;
+  margin-bottom: 4rpx;
+}
+
+.stat-value {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #007aff;
+}
+
+/* 操作按钮 */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.actions .btn {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 20rpx;
+  font-size: 24rpx;
+}
+
+.actions .icon {
+  margin-right: 8rpx;
+  font-size: 20rpx;
+}
+
+/* 表格容器 */
+.table-container {
+  border: 1rpx solid #e9ecef;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.table-scroll {
+  max-height: 600rpx;
+}
+
+.result-table {
+  min-width: 100%;
+  background: #fff;
+}
+
+/* 表格样式 */
+.table-header {
+  display: flex;
+  background: #f8f9fa;
+  border-bottom: 2rpx solid #dee2e6;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.table-row {
+  display: flex;
+  border-bottom: 1rpx solid #e9ecef;
+}
+
+.table-row:nth-child(even) {
+  background: #f8f9fa;
+}
+
+.table-row:hover {
+  background: #e3f2fd;
+}
+
+.table-cell {
+  flex: 1;
+  min-width: 120rpx;
+  padding: 12rpx 16rpx;
+  border-right: 1rpx solid #e9ecef;
+  display: flex;
+  align-items: center;
+  word-break: break-word;
+}
+
+.table-cell:last-child {
+  border-right: none;
+}
+
+.header-cell {
+  font-weight: 600;
+  color: #495057;
+  background: #e9ecef;
+}
+
+.cell-content {
+  font-size: 26rpx;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* 空结果状态 */
+.empty-container {
+  padding: 80rpx 40rpx;
+  text-align: center;
+}
+
+.empty-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.empty-icon {
+  font-size: 64rpx;
+  margin-bottom: 16rpx;
+  opacity: 0.6;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #28a745;
+}
+
+.empty-message {
+  font-size: 28rpx;
+  color: #6c757d;
+  margin-bottom: 24rpx;
+}
+
+.empty-stats {
+  margin-bottom: 24rpx;
+}
+
+.stat-text {
+  font-size: 26rpx;
+  color: #6c757d;
+}
+
+.empty-actions {
+  text-align: center;
+}
+
+/* 初始状态 */
+.initial-container {
+  padding: 80rpx 40rpx;
+  text-align: center;
+}
+
+.initial-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.initial-icon {
+  font-size: 64rpx;
+  margin-bottom: 16rpx;
+  opacity: 0.6;
+}
+
+.initial-text {
+  font-size: 28rpx;
+  color: #6c757d;
+  line-height: 1.5;
+}
+
+/* 响应式设计 */
+@media (max-width: 750rpx) {
+  .success-container {
+    padding: 16rpx;
+  }
+  
+  .stats {
+    flex-direction: column;
+    gap: 12rpx;
+  }
+  
+  .actions {
+    flex-wrap: wrap;
+  }
+  
+  .table-cell {
+    min-width: 100rpx;
+    padding: 8rpx 12rpx;
+  }
+  
+  .cell-content {
+    font-size: 24rpx;
+  }
+} 

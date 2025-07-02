@@ -1,10 +1,17 @@
 {
   "pages": [
-    "pages/index/index"
+    "pages/index/index",
+    "pages/editor/index",
+    "pages/practice/index",
+    "pages/about/index"
   ],
+  "workers": "workers",
   "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "SQL学习助手",
     "navigationBarTextStyle": "black",
-    "navigationStyle": "custom"
+    "backgroundColor": "#f8f8f8"
   },
   "style": "v2",
   "renderer": "skyline",

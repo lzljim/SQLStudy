@@ -1,0 +1,99 @@
+<!--components/sql-editor/sql-editor.wxml-->
+<view class="sql-editor {{theme}}">
+  <!-- 工具栏 -->
+  <view class="toolbar">
+    <view class="toolbar-left">
+      <text class="toolbar-item" bindtap="formatSQL">
+        <text class="icon">⚡</text>
+        格式化
+      </text>
+      <text class="toolbar-item" bindtap="clearContent">
+        <text class="icon">🗑️</text>
+        清空
+      </text>
+    </view>
+    <view class="toolbar-right">
+      <text class="cursor-info">
+        第{{currentLine}}行，第{{currentColumn}}列
+      </text>
+    </view>
+  </view>
+
+  <!-- 编辑器主体 -->
+  <view class="editor-container" style="height: {{height}};">
+    <!-- 行号区域 -->
+    <view class="line-numbers">
+      <text 
+        wx:for="{{lineNumbers}}" 
+        wx:key="index" 
+        class="line-number"
+      >
+        {{item}}
+      </text>
+    </view>
+
+    <!-- 代码编辑区域 -->
+    <view class="code-area">
+      <textarea
+        class="sql-textarea"
+        value="{{sqlText}}"
+        placeholder="{{placeholder}}"
+        disabled="{{readonly}}"
+        bindinput="onInput"
+        bindfocus="onFocus"
+        bindblur="onBlur"
+        auto-height="{{false}}"
+        show-confirm-bar="{{false}}"
+        cursor-spacing="20"
+        maxlength="-1"
+      ></textarea>
+    </view>
+  </view>
+
+  <!-- 快捷模板 -->
+  <view class="templates" wx:if="{{!readonly}}">
+    <view class="template-title">快捷模板：</view>
+    <view class="template-list">
+      <text 
+        class="template-item" 
+        bindtap="insertTemplate" 
+        data-template="SELECT * FROM users;"
+      >
+        SELECT
+      </text>
+      <text 
+        class="template-item" 
+        bindtap="insertTemplate" 
+        data-template="INSERT INTO users (name, email) VALUES ('张三', 'zhangsan@example.com');"
+      >
+        INSERT
+      </text>
+      <text 
+        class="template-item" 
+        bindtap="insertTemplate" 
+        data-template="UPDATE users SET name = '李四' WHERE id = 1;"
+      >
+        UPDATE
+      </text>
+      <text 
+        class="template-item" 
+        bindtap="insertTemplate" 
+        data-template="DELETE FROM users WHERE id = 1;"
+      >
+        DELETE
+      </text>
+    </view>
+  </view>
+
+  <!-- 执行按钮 -->
+  <view class="execute-bar" wx:if="{{!readonly}}">
+    <button 
+      class="btn btn-primary execute-btn" 
+      bindtap="executeSQL"
+      disabled="{{!sqlText.trim()}}"
+    >
+      <text class="icon">▶️</text>
+      执行SQL
+    </button>
+  </view>
+</view> 

@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "SQL编辑器",
+  "navigationBarBackgroundColor": "#667eea",
+  "navigationBarTextStyle": "white",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "sql-editor": "/components/sql-editor/sql-editor",
+    "result-viewer": "/components/result-viewer/result-viewer"
+  }
+}

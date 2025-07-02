@@ -1,0 +1,43 @@
+<!--pages/worker-test/index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">Worker 测试</text>
+    <text class="subtitle">测试Worker线程是否正常工作</text>
+  </view>
+
+  <view class="status-section">
+    <view class="status-item">
+      <text class="status-label">状态:</text>
+      <text class="status-value {{status === '测试完成' ? 'success' : status === '测试失败' ? 'error' : 'loading'}}">
+        {{status}}
+      </text>
+    </view>
+  </view>
+
+  <view class="error-section" wx:if="{{error}}">
+    <view class="section-title">错误信息</view>
+    <view class="error-message">{{error}}</view>
+  </view>
+
+  <view class="logs-section">
+    <view class="section-title">
+      日志信息
+      <button class="btn btn-small" bindtap="clearLogs">清空</button>
+    </view>
+    <view class="logs-content">
+      <view wx:for="{{logs}}" wx:key="index" class="log-item">
+        <text class="log-time">[{{item.time}}]</text>
+        <text class="log-message">{{item.message}}</text>
+      </view>
+      <view wx:if="{{logs.length === 0}}" class="no-logs">
+        暂无日志
+      </view>
+    </view>
+  </view>
+
+  <view class="button-section">
+    <button class="btn btn-primary" bindtap="retest">
+      重新测试
+    </button>
+  </view>
+</view> 

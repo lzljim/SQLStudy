@@ -1,0 +1,160 @@
+<!--pages/about/index.wxml-->
+<view class="container">
+  <!-- 页面头部 -->
+  <view class="header">
+    <view class="app-logo">
+      <text class="logo-icon">📊</text>
+    </view>
+    <view class="app-info">
+      <text class="app-name">{{appInfo.name}}</text>
+      <text class="app-version">v{{appInfo.version}}</text>
+    </view>
+  </view>
+
+  <!-- 应用描述 -->
+  <view class="description-card card">
+    <text class="description-text">{{appInfo.description}}</text>
+  </view>
+
+  <!-- 功能特性 -->
+  <view class="features-section">
+    <view class="section-title">功能特性</view>
+    <view class="features-grid">
+      <view 
+        class="feature-item" 
+        wx:for="{{appInfo.features}}" 
+        wx:key="index"
+      >
+        <text class="feature-icon">✨</text>
+        <text class="feature-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 技术栈 -->
+  <view class="tech-section">
+    <view class="section-title">技术栈</view>
+    <view class="tech-list">
+      <view 
+        class="tech-item" 
+        wx:for="{{techStack}}" 
+        wx:key="name"
+      >
+        <view class="tech-info">
+          <text class="tech-name">{{item.name}}</text>
+          <text class="tech-desc">{{item.description}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 开发团队 -->
+  <view class="team-section">
+    <view class="section-title">开发团队</view>
+    <view class="team-list">
+      <view 
+        class="team-item" 
+        wx:for="{{team}}" 
+        wx:key="name"
+      >
+        <view class="team-info">
+          <text class="team-name">{{item.name}}</text>
+          <text class="team-role">{{item.role}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 联系方式 -->
+  <view class="contact-section">
+    <view class="section-title">联系我们</view>
+    <view class="contact-list">
+      <view 
+        class="contact-item" 
+        data-type="email"
+        bindtap="copyContact"
+      >
+        <text class="contact-icon">📧</text>
+        <view class="contact-info">
+          <text class="contact-label">邮箱</text>
+          <text class="contact-value">{{contact.email}}</text>
+        </view>
+        <text class="contact-action">复制</text>
+      </view>
+      
+      <view 
+        class="contact-item" 
+        data-type="website"
+        bindtap="copyContact"
+      >
+        <text class="contact-icon">🌐</text>
+        <view class="contact-info">
+          <text class="contact-label">官网</text>
+          <text class="contact-value">{{contact.website}}</text>
+        </view>
+        <text class="contact-action">复制</text>
+      </view>
+      
+      <view 
+        class="contact-item" 
+        data-type="github"
+        bindtap="copyContact"
+      >
+        <text class="contact-icon">📦</text>
+        <view class="contact-info">
+          <text class="contact-label">GitHub</text>
+          <text class="contact-value">{{contact.github}}</text>
+        </view>
+        <text class="contact-action">复制</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 更新日志 -->
+  <view class="changelog-section">
+    <view class="section-header">
+      <text class="section-title">更新日志</text>
+      <text class="view-more" bindtap="viewFullChangelog">查看全部</text>
+    </view>
+    <view class="changelog-list">
+      <view 
+        class="changelog-item" 
+        wx:for="{{changelog}}" 
+        wx:key="version"
+      >
+        <view class="changelog-header">
+          <text class="changelog-version">v{{item.version}}</text>
+          <text class="changelog-date">{{item.date}}</text>
+        </view>
+        <view class="changelog-changes">
+          <text 
+            class="change-item" 
+            wx:for="{{item.changes}}" 
+            wx:for-item="change" 
+            wx:key="index"
+          >
+            • {{change}}
+          </text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="actions-section">
+    <button class="btn btn-secondary action-btn" bindtap="showHelp">
+      <text class="btn-icon">❓</text>
+      使用帮助
+    </button>
+    <button class="btn btn-secondary action-btn" bindtap="feedback">
+      <text class="btn-icon">💬</text>
+      反馈建议
+    </button>
+  </view>
+
+  <!-- 底部版权 -->
+  <view class="footer">
+    <text class="footer-text">© 2024 SQL学习助手</text>
+    <text class="footer-text">让SQL学习变得简单有趣</text>
+  </view>
+</view>

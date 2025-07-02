@@ -1,0 +1,119 @@
+<!--components/result-viewer/result-viewer.wxml-->
+<view class="result-viewer">
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading">
+      <text class="loading-icon">⏳</text>
+      <text class="loading-text">正在执行SQL...</text>
+    </view>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error-container" wx:elif="{{error}}">
+    <view class="error-header">
+      <text class="error-icon">❌</text>
+      <text class="error-title">执行失败</text>
+    </view>
+    <view class="error-message">{{error}}</view>
+    <view class="error-actions">
+      <button class="btn btn-secondary" bindtap="clearResult">清空</button>
+    </view>
+  </view>
+
+  <!-- 成功状态 -->
+  <view class="success-container" wx:elif="{{result && resultType === 'success'}}">
+    <!-- 统计信息 -->
+    <view class="stats" wx:if="{{showStats}}">
+      <view class="stat-item">
+        <text class="stat-label">执行时间:</text>
+        <text class="stat-value">{{executionTime}}ms</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">行数:</text>
+        <text class="stat-value">{{rowCount}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">列数:</text>
+        <text class="stat-value">{{columnCount}}</text>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="actions">
+      <button class="btn btn-secondary" bindtap="copyResult">
+        <text class="icon">📋</text>
+        复制
+      </button>
+      <button class="btn btn-secondary" bindtap="exportCSV">
+        <text class="icon">📄</text>
+        导出CSV
+      </button>
+      <button class="btn btn-secondary" bindtap="clearResult">
+        <text class="icon">🗑️</text>
+        清空
+      </button>
+    </view>
+
+    <!-- 数据表格 -->
+    <view class="table-container" wx:if="{{showTable}}">
+      <scroll-view class="table-scroll" scroll-x="true" scroll-y="true">
+        <view class="result-table">
+          <!-- 表头 -->
+          <view class="table-header">
+            <view 
+              class="table-cell header-cell" 
+              wx:for="{{result.columns}}" 
+              wx:key="index"
+            >
+              {{item}}
+            </view>
+          </view>
+
+          <!-- 表体 -->
+          <view class="table-body">
+            <view 
+              class="table-row" 
+              wx:for="{{result.data}}" 
+              wx:for-item="row" 
+              wx:for-index="rowIndex" 
+              wx:key="rowIndex"
+            >
+              <view 
+                class="table-cell" 
+                wx:for="{{row}}" 
+                wx:for-item="cell" 
+                wx:for-index="cellIndex" 
+                wx:key="cellIndex"
+              >
+                <text class="cell-content">{{cell}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 空结果状态 -->
+  <view class="empty-container" wx:elif="{{result && resultType === 'empty'}}">
+    <view class="empty-header">
+      <text class="empty-icon">📭</text>
+      <text class="empty-title">执行成功</text>
+    </view>
+    <view class="empty-message">查询完成，但没有返回数据</view>
+    <view class="empty-stats" wx:if="{{showStats}}">
+      <text class="stat-text">执行时间: {{executionTime}}ms</text>
+    </view>
+    <view class="empty-actions">
+      <button class="btn btn-secondary" bindtap="clearResult">清空</button>
+    </view>
+  </view>
+
+  <!-- 初始状态 -->
+  <view class="initial-container" wx:else>
+    <view class="initial-content">
+      <text class="initial-icon">💡</text>
+      <text class="initial-text">输入SQL语句并点击执行按钮查看结果</text>
+    </view>
+  </view>
+</view> 

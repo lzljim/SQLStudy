@@ -1,0 +1,131 @@
+<!--pages/wasm-test/index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">SQL.js 测试</text>
+    <text class="subtitle">验证SQL.js在微信小程序中的使用</text>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-section">
+    <view class="section-title">版本信息</view>
+    <view class="version-info">
+      <view class="info-item">
+        <text class="info-label">基础库版本:</text>
+        <text class="info-value {{libVersionInfo.supported ? 'success' : 'error'}}">
+          {{libVersionInfo.version}}
+        </text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">WebAssembly支持:</text>
+        <text class="info-value {{libVersionInfo.webassembly ? 'success' : 'error'}}">
+          {{libVersionInfo.webassembly ? '是' : '否'}}
+        </text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">Worker支持:</text>
+        <text class="info-value {{libVersionInfo.worker ? 'success' : 'error'}}">
+          {{libVersionInfo.worker ? '是' : '否'}}
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Worker状态 -->
+  <view class="status-section">
+    <view class="status-item">
+      <text class="status-label">Worker状态:</text>
+      <text class="status-value {{isDbInitialized ? 'success' : 'error'}}">
+        {{workerStatus}}
+      </text>
+    </view>
+    <view class="status-item" wx:if="{{loading}}">
+      <text class="loading">正在处理...</text>
+    </view>
+  </view>
+
+  <!-- SQL编辑器 -->
+  <view class="editor-section">
+    <view class="section-title">SQL编辑器</view>
+    <textarea 
+      class="sql-editor"
+      value="{{sqlCode}}"
+      placeholder="请输入SQL语句..."
+      bindinput="onSqlInput"
+      auto-height
+    ></textarea>
+    
+    <view class="button-group">
+      <button class="btn btn-primary" bindtap="executeSQL" disabled="{{loading}}">
+        执行SQL
+      </button>
+      <button class="btn btn-secondary" bindtap="getTableSchema" disabled="{{loading}}">
+        查看表结构
+      </button>
+      <button class="btn btn-secondary" bindtap="resetDatabase" disabled="{{loading}}">
+        重置数据库
+      </button>
+      <button class="btn btn-secondary" bindtap="clearResult">
+        清空结果
+      </button>
+    </view>
+  </view>
+
+  <!-- 错误信息 -->
+  <view class="error-section" wx:if="{{error}}">
+    <view class="section-title">错误信息</view>
+    <view class="error-message">{{error}}</view>
+  </view>
+
+  <!-- 执行结果 -->
+  <view class="result-section" wx:if="{{result}}">
+    <view class="section-title">
+      执行结果 
+      <text class="result-info">
+        ({{result.rowCount}}行, {{result.executionTime}}ms)
+      </text>
+    </view>
+    
+    <view class="result-content">
+      <view wx:for="{{result.data}}" wx:key="index" class="result-table">
+        <view class="table-title" wx:if="{{result.data.length > 1}}">
+          结果集 {{index + 1}}
+        </view>
+        
+        <!-- 表头 -->
+        <view class="table-header" wx:if="{{item.columns.length > 0}}">
+          <view wx:for="{{item.columns}}" wx:key="colIndex" wx:for-item="column" class="header-cell">
+            {{column}}
+          </view>
+        </view>
+        
+        <!-- 表数据 -->
+        <view class="table-body">
+          <view wx:for="{{item.values}}" wx:key="rowIndex" wx:for-item="row" class="table-row">
+            <view wx:for="{{row}}" wx:key="cellIndex" wx:for-item="cell" class="table-cell">
+              {{cell !== null ? cell : 'NULL'}}
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 示例SQL -->
+  <view class="examples-section">
+    <view class="section-title">示例SQL</view>
+    <view class="example-list">
+      <view class="example-item" bindtap="setExample" data-sql="SELECT * FROM users;">
+        SELECT * FROM users;
+      </view>
+      <view class="example-item" bindtap="setExample" data-sql="SELECT name, age FROM users WHERE age > 25;">
+        SELECT name, age FROM users WHERE age > 25;
+      </view>
+      <view class="example-item" bindtap="setExample" data-sql="SELECT u.name, o.product_name, o.price FROM users u JOIN orders o ON u.id = o.user_id;">
+        SELECT u.name, o.product_name, o.price FROM users u JOIN orders o ON u.id = o.user_id;
+      </view>
+      <view class="example-item" bindtap="setExample" data-sql="SELECT city, COUNT(*) as user_count FROM users GROUP BY city;">
+        SELECT city, COUNT(*) as user_count FROM users GROUP BY city;
+      </view>
+    </view>
+  </view>
+</view> 

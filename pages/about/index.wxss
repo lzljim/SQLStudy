@@ -1,0 +1,348 @@
+/* pages/about/index.wxss */
+
+.container {
+  background: #f8f9fa;
+  /* 移除 min-height: 100vh，允许内容自然扩展 */
+}
+
+/* 页面头部 */
+.header {
+  background: linear-gradient(135deg, #ff9500 0%, #ff6b35 100%);
+  padding: 60rpx 32rpx;
+  text-align: center;
+  color: #fff;
+}
+
+.app-logo {
+  margin-bottom: 24rpx;
+}
+
+.logo-icon {
+  font-size: 80rpx;
+}
+
+.app-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app-name {
+  font-size: 40rpx;
+  font-weight: 700;
+  margin-bottom: 8rpx;
+}
+
+.app-version {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+/* 应用描述 */
+.description-card {
+  margin: 32rpx;
+  text-align: center;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.description-text {
+  font-size: 28rpx;
+  color: #6c757d;
+  line-height: 1.6;
+}
+
+/* 通用区域样式 */
+.features-section,
+.tech-section,
+.team-section,
+.contact-section,
+.changelog-section {
+  padding: 0 32rpx 40rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 24rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.view-more {
+  font-size: 26rpx;
+  color: #007aff;
+  cursor: pointer;
+}
+
+/* 功能特性 */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+}
+
+.feature-text {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 技术栈 */
+.tech-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.tech-item {
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.tech-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.tech-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.tech-desc {
+  font-size: 24rpx;
+  color: #6c757d;
+}
+
+/* 开发团队 */
+.team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.team-item {
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.team-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.team-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.team-role {
+  font-size: 24rpx;
+  color: #6c757d;
+}
+
+/* 联系方式 */
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.contact-item:active {
+  transform: scale(0.98);
+  background: #f8f9fa;
+}
+
+.contact-icon {
+  font-size: 32rpx;
+  margin-right: 20rpx;
+}
+
+.contact-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-label {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4rpx;
+}
+
+.contact-value {
+  font-size: 24rpx;
+  color: #6c757d;
+}
+
+.contact-action {
+  font-size: 24rpx;
+  color: #007aff;
+  padding: 8rpx 16rpx;
+  background: rgba(0, 122, 255, 0.1);
+  border-radius: 6rpx;
+}
+
+/* 更新日志 */
+.changelog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.changelog-item {
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.changelog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.changelog-version {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.changelog-date {
+  font-size: 24rpx;
+  color: #6c757d;
+}
+
+.changelog-changes {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.change-item {
+  font-size: 24rpx;
+  color: #6c757d;
+  line-height: 1.4;
+}
+
+/* 操作按钮 */
+.actions-section {
+  padding: 0 32rpx 40rpx;
+  display: flex;
+  gap: 20rpx;
+}
+
+.action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx;
+  font-size: 28rpx;
+  background: #fff;
+  border: 1rpx solid #e9ecef;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.action-btn .btn-icon {
+  margin-right: 12rpx;
+  font-size: 24rpx;
+}
+
+/* 底部版权 */
+.footer {
+  padding: 40rpx 32rpx 60rpx;
+  text-align: center;
+  background: #fff;
+  border-top: 1rpx solid #e9ecef;
+}
+
+.footer-text {
+  display: block;
+  font-size: 24rpx;
+  color: #6c757d;
+  line-height: 1.5;
+  margin-bottom: 8rpx;
+}
+
+/* 响应式设计 */
+@media (max-width: 750rpx) {
+  .header {
+    padding: 40rpx 24rpx;
+  }
+  
+  .description-card {
+    margin: 24rpx;
+  }
+  
+  .features-section,
+  .tech-section,
+  .team-section,
+  .contact-section,
+  .changelog-section {
+    padding-left: 24rpx;
+    padding-right: 24rpx;
+  }
+  
+  .actions-section {
+    padding-left: 24rpx;
+    padding-right: 24rpx;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .app-name {
+    font-size: 36rpx;
+  }
+  
+  .logo-icon {
+    font-size: 64rpx;
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "SQL练习题",
+  "navigationBarBackgroundColor": "#34c759",
+  "navigationBarTextStyle": "white",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "sql-editor": "/components/sql-editor/sql-editor"
+  }
+}
