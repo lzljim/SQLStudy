@@ -5,5 +5,6 @@
   "navigationStyle": "custom",
   "usingComponents": {
     "sql-editor": "/components/sql-editor/sql-editor"
-  }
+  },
+  "disableScroll": false
 }

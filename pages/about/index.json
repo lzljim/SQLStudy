@@ -3,5 +3,6 @@
   "navigationBarTitleText": "关于",
   "navigationBarBackgroundColor": "#ff9500",
   "navigationBarTextStyle": "white",
-  "navigationStyle": "custom"
+  "navigationStyle": "custom",
+  "disableScroll": false
 }

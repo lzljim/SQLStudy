@@ -6,5 +6,6 @@
   "usingComponents": {
     "sql-editor": "/components/sql-editor/sql-editor",
     "result-viewer": "/components/result-viewer/result-viewer"
-  }
+  },
+  "disableScroll": false
 }

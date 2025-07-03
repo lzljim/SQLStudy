@@ -1,5 +1,7 @@
 {
   "navigationStyle": "custom",
+  "enablePullDownRefresh": false,
+  "disableScroll": false,
   "usingComponents": {
     "navigation-bar": "/components/navigation-bar/navigation-bar"
   }

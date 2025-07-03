@@ -1,88 +1,90 @@
 <!--pages/index/index.wxml-->
-<view class="container">
-  <!-- 头部区域 -->
-  <view class="header">
-    <view class="app-title">
-      <text class="title-icon">📊</text>
-      <text class="title-text">SQL学习助手</text>
+<scroll-view class="scroll-container" scroll-y="true" enhanced="true" show-scrollbar="true">
+  <view class="container">
+    <!-- 头部区域 -->
+    <view class="header">
+      <view class="app-title">
+        <text class="title-icon">📊</text>
+        <text class="title-text">SQL学习助手</text>
+      </view>
+      <view class="app-subtitle">随时随地学习SQL，提升数据库技能</view>
     </view>
-    <view class="app-subtitle">随时随地学习SQL，提升数据库技能</view>
-  </view>
 
-  <!-- 统计卡片 -->
-  <view class="stats-card card">
-    <view class="stats-grid">
-      <view class="stat-item">
-        <text class="stat-number">{{stats.totalQuestions}}</text>
-        <text class="stat-label">练习题</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-number">{{stats.completedQuestions}}</text>
-        <text class="stat-label">已完成</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-number">{{stats.totalUsers}}</text>
-        <text class="stat-label">用户数</text>
-      </view>
-    </view>
-  </view>
-
-  <!-- 功能导航 -->
-  <view class="features-section">
-    <view class="section-title">功能导航</view>
-    <view class="feature-grid">
-      <view 
-        class="feature-card card" 
-        wx:for="{{featureCards}}" 
-        wx:key="id"
-        data-path="{{item.path}}"
-        bindtap="navigateToFeature"
-      >
-        <view class="feature-icon" style="background: {{item.color}}20; color: {{item.color}};">
-          <text class="icon">{{item.icon}}</text>
+    <!-- 统计卡片 -->
+    <view class="stats-card card">
+      <view class="stats-grid">
+        <view class="stat-item">
+          <text class="stat-number">{{stats.totalQuestions}}</text>
+          <text class="stat-label">练习题</text>
         </view>
-        <view class="feature-content">
-          <text class="feature-title">{{item.title}}</text>
-          <text class="feature-desc">{{item.description}}</text>
+        <view class="stat-item">
+          <text class="stat-number">{{stats.completedQuestions}}</text>
+          <text class="stat-label">已完成</text>
         </view>
-        <view class="feature-arrow">
-          <text class="arrow-icon">→</text>
+        <view class="stat-item">
+          <text class="stat-number">{{stats.totalUsers}}</text>
+          <text class="stat-label">用户数</text>
         </view>
       </view>
     </view>
-  </view>
 
-  <!-- 快速开始 -->
-  <view class="quick-start-section">
-    <view class="section-title">快速开始</view>
-    <view class="quick-start-card card">
-      <view class="quick-start-header">
-        <text class="quick-start-title">立即体验SQL编辑器</text>
-        <text class="quick-start-desc">选择一个示例SQL语句开始学习</text>
-      </view>
-      
-      <view class="examples-list">
+    <!-- 功能导航 -->
+    <view class="features-section">
+      <view class="section-title">功能导航</view>
+      <view class="feature-grid">
         <view 
-          class="example-item" 
-          wx:for="{{quickStartExamples}}" 
-          wx:key="index"
-          data-sql="{{item}}"
-          bindtap="copyExample"
+          class="feature-card card" 
+          wx:for="{{featureCards}}" 
+          wx:key="id"
+          data-path="{{item.path}}"
+          bindtap="navigateToFeature"
         >
-          <text class="example-sql">{{item}}</text>
-          <text class="copy-icon">📋</text>
+          <view class="feature-icon" style="background: {{item.color}}20; color: {{item.color}};">
+            <text class="icon">{{item.icon}}</text>
+          </view>
+          <view class="feature-content">
+            <text class="feature-title">{{item.title}}</text>
+            <text class="feature-desc">{{item.description}}</text>
+          </view>
+          <view class="feature-arrow">
+            <text class="arrow-icon">→</text>
+          </view>
         </view>
       </view>
-      
-      <button class="btn btn-primary quick-start-btn" bindtap="quickStart">
-        <text class="btn-icon">🚀</text>
-        开始编写SQL
-      </button>
+    </view>
+
+    <!-- 快速开始 -->
+    <view class="quick-start-section">
+      <view class="section-title">快速开始</view>
+      <view class="quick-start-card card">
+        <view class="quick-start-header">
+          <text class="quick-start-title">立即体验SQL编辑器</text>
+          <text class="quick-start-desc">选择一个示例SQL语句开始学习</text>
+        </view>
+        
+        <view class="examples-list">
+          <view 
+            class="example-item" 
+            wx:for="{{quickStartExamples}}" 
+            wx:key="index"
+            data-sql="{{item}}"
+            bindtap="copyExample"
+          >
+            <text class="example-sql">{{item}}</text>
+            <text class="copy-icon">📋</text>
+          </view>
+        </view>
+        
+        <button class="btn btn-primary quick-start-btn" bindtap="quickStart">
+          <text class="btn-icon">🚀</text>
+          开始编写SQL
+        </button>
+      </view>
+    </view>
+
+    <!-- 底部信息 -->
+    <view class="footer">
+      <text class="footer-text">让SQL学习变得简单有趣</text>
     </view>
   </view>
-
-  <!-- 底部信息 -->
-  <view class="footer">
-    <text class="footer-text">让SQL学习变得简单有趣</text>
-  </view>
-</view>
+</scroll-view>

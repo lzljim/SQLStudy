@@ -266,5 +266,30 @@ Page({
     this.setData({
       sqlText: sql
     })
+  },
+
+  onSchema() {
+    wx.showToast({ title: '表结构', icon: 'none' })
+  },
+  onHistory() {
+    wx.showToast({ title: '历史', icon: 'none' })
+  },
+  onUndo() {
+    wx.showToast({ title: '撤销', icon: 'none' })
+  },
+  onRedo() {
+    wx.showToast({ title: '重做', icon: 'none' })
+  },
+  onClear() {
+    wx.showToast({ title: '清空', icon: 'none' })
+  },
+  onExecute() {
+    wx.showToast({ title: '执行SQL', icon: 'none' })
+  },
+  onBack() {
+    wx.navigateBack()
+  },
+  onMore() {
+    wx.showToast({ title: '更多', icon: 'none' })
   }
 })

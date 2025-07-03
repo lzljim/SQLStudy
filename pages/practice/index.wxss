@@ -1,7 +1,13 @@
 /* pages/practice/index.wxss */
 
+.scroll-container {
+  height: 100vh;
+  width: 100%;
+}
+
 .container {
   background: #f8f9fa;
+  min-height: 100vh;
   /* 移除 min-height: 100vh，允许内容自然扩展 */
 }
 
