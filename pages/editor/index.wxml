@@ -60,14 +60,16 @@
           </view>
         </view>
         <view class="editor-body">
-          <sql-editor 
-            class="sql-editor-component"
-            value="{{sqlText}}"
-            placeholder="请输入SQL语句..."
-            height="300rpx"
-            bindinput="onSqlInput"
-            bindexecute="onExecuteSQL"
-          />
+          <view class="editor-row">
+            <view class="editor-linenum">
+              <block wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="index">
+                <text>{{index+1}}</text>
+              </block>
+            </view>
+            <textarea class="sql-textarea" value="{{sqlText}}" placeholder="请输入SQL语句..." bindinput="onSqlInput" auto-height/>
+          </view>
+          <!-- 简易语法高亮（可后续用富文本或三方组件替换） -->
+          <!-- <rich-text nodes="{{highlightedSQL}}"></rich-text> -->
         </view>
       </view>
 
@@ -135,6 +137,61 @@
           <text class="quick-action-text">关联查询</text>
         </button>
       </view>
+    </view>
+
+    <!-- 模板区折叠面板 -->
+    <view class="template-panel">
+      <view class="template-tabs">
+        <text class="tab active">查询模板</text>
+        <text class="tab">修改模板</text>
+      </view>
+      <view class="template-list">
+        <view class="template-item" bindtap="insertField" data-field="SELECT {字段} FROM {表} WHERE {条件}">
+          SELECT {字段} FROM {表} WHERE {条件}
+        </view>
+        <view class="template-item" bindtap="insertField" data-field="INSERT INTO {表} ({字段}) VALUES ({值})">
+          INSERT INTO {表} ({字段}) VALUES ({值})
+        </view>
+      </view>
+    </view>
+
+    <!-- 历史下拉面板 -->
+    <view class="history-panel" wx:if="{{showHistoryPanel}}">
+      <view class="history-title">历史SQL</view>
+      <block wx:for="{{sqlHistory}}" wx:key="idx">
+        <view class="history-item" bindtap="selectHistory" data-sql="{{item}}">{{item}}</view>
+      </block>
+    </view>
+
+    <!-- 表结构弹窗 -->
+    <view class="schema-panel" wx:if="{{showSchemaPanel}}">
+      <view class="schema-title">表结构 <button class="icon-btn" bindtap="closeSchemaPanel">✖</button></view>
+      <block wx:for="{{tableSchema}}" wx:key="table">
+        <view class="schema-table">
+          <text class="table-name">{{item.table}}</text>
+          <view class="columns-list">
+            <block wx:for="{{item.columns}}" wx:key="col">
+              <text class="column-item" bindtap="insertField" data-field="{{col}}">{{col}}</text>
+            </block>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 清空确认弹窗 -->
+    <view class="clear-confirm" wx:if="{{showClearConfirm}}">
+      <view class="confirm-content">
+        <text>确定要清空SQL内容吗？</text>
+        <button bindtap="confirmClear">确定</button>
+        <button bindtap="cancelClear">取消</button>
+      </view>
+    </view>
+
+    <!-- 更多菜单弹窗 -->
+    <view class="more-panel" wx:if="{{showMorePanel}}">
+      <view class="more-item" bindtap="onShare">分享</view>
+      <view class="more-item" bindtap="onExport">导出CSV</view>
+      <view class="more-item" bindtap="closePanel">关闭</view>
     </view>
   </view>
 </scroll-view>

@@ -6,16 +6,25 @@ Page({
    */
   data: {
     sqlText: '',
+    sqlHistory: [],
+    historyIndex: -1,
+    showSchemaPanel: false,
+    showHistoryPanel: false,
+    showMorePanel: false,
+    showClearConfirm: false,
+    loading: false,
     result: null,
     error: '',
-    loading: false,
-    showSchema: false,
-    tableSchema: [],
     // 示例数据库信息
     databaseInfo: {
       name: '示例数据库',
       tables: ['users', 'orders', 'products']
-    }
+    },
+    // 假设有表结构数据
+    tableSchema: [
+      { table: 'users', columns: ['id', 'name', 'age'] },
+      { table: 'orders', columns: ['id', 'user_id', 'product', 'price'] }
+    ]
   },
 
   /**
@@ -111,96 +120,34 @@ Page({
 
   // SQL输入事件
   onSqlInput(e) {
-    this.setData({
-      sqlText: e.detail.value
-    })
+    const value = e.detail.value
+    let { sqlHistory, historyIndex } = this.data
+    // 只在新输入时追加历史
+    if (historyIndex === sqlHistory.length - 1) {
+      sqlHistory.push(value)
+      historyIndex = sqlHistory.length - 1
+    } else {
+      sqlHistory = sqlHistory.slice(0, historyIndex + 1)
+      sqlHistory.push(value)
+      historyIndex = sqlHistory.length - 1
+    }
+    this.setData({ sqlText: value, sqlHistory, historyIndex })
   },
 
   // 执行SQL
-  onExecuteSQL(e) {
-    const sql = e.detail.sql
-    if (!sql.trim()) {
-      wx.showToast({
-        title: '请输入SQL语句',
-        icon: 'none'
-      })
-      return
-    }
-
-    this.executeSQL(sql)
-  },
-
-  // 执行SQL语句
-  async executeSQL(sql) {
-    this.setData({
-      loading: true,
-      result: null,
-      error: ''
-    })
-
-    try {
-      // TODO: 调用SQL执行引擎
-      const result = await this.mockExecuteSQL(sql)
-      
+  onExecute() {
+    this.setData({ loading: true })
+    setTimeout(() => {
+      // 假设执行SQL并返回结果
       this.setData({
-        result,
-        loading: false
+        loading: false,
+        result: { rowCount: 2, executionTime: 123, data: [
+          { columns: ['id', 'name'], values: [[1, 'Tom'], [2, 'Jerry']] }
+        ] },
+        error: ''
       })
-    } catch (error) {
-      this.setData({
-        error: error.message,
-        loading: false
-      })
-    }
-  },
-
-  // 模拟SQL执行
-  mockExecuteSQL(sql) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const upperSql = sql.toUpperCase()
-        
-        if (upperSql.includes('SELECT')) {
-          // 模拟SELECT查询
-          if (upperSql.includes('USERS')) {
-            resolve({
-              columns: ['id', 'name', 'email', 'age', 'city'],
-              data: [
-                [1, '张三', 'zhangsan@example.com', 25, '北京'],
-                [2, '李四', 'lisi@example.com', 30, '上海'],
-                [3, '王五', 'wangwu@example.com', 28, '广州']
-              ],
-              executionTime: Math.floor(Math.random() * 50) + 10
-            })
-          } else if (upperSql.includes('ORDERS')) {
-            resolve({
-              columns: ['id', 'user_id', 'product_name', 'quantity', 'price'],
-              data: [
-                [1, 1, 'iPhone 15', 1, 5999.00],
-                [2, 2, 'MacBook Pro', 1, 12999.00],
-                [3, 1, 'AirPods Pro', 2, 1999.00]
-              ],
-              executionTime: Math.floor(Math.random() * 50) + 10
-            })
-          } else {
-            resolve({
-              columns: ['message'],
-              data: [['查询执行成功']],
-              executionTime: Math.floor(Math.random() * 50) + 10
-            })
-          }
-        } else if (upperSql.includes('INSERT') || upperSql.includes('UPDATE') || upperSql.includes('DELETE')) {
-          // 模拟DML操作
-          resolve({
-            columns: ['affected_rows'],
-            data: [[1]],
-            executionTime: Math.floor(Math.random() * 30) + 5
-          })
-        } else {
-          reject(new Error('不支持的SQL语句类型'))
-        }
-      }, 500) // 模拟网络延迟
-    })
+      wx.showToast({ title: '执行成功', icon: 'success' })
+    }, 1200)
   },
 
   // 清空结果
@@ -268,28 +215,81 @@ Page({
     })
   },
 
+  // 表结构弹窗
   onSchema() {
-    wx.showToast({ title: '表结构', icon: 'none' })
+    this.setData({ showSchemaPanel: true })
   },
+  closeSchemaPanel() {
+    this.setData({ showSchemaPanel: false })
+  },
+  insertField(e) {
+    const field = e.currentTarget.dataset.field
+    this.setData({ sqlText: this.data.sqlText + ' ' + field })
+    wx.showToast({ title: '已插入字段', icon: 'none' })
+  },
+
+  // 历史下拉
   onHistory() {
-    wx.showToast({ title: '历史', icon: 'none' })
+    this.setData({ showHistoryPanel: !this.data.showHistoryPanel })
   },
+  selectHistory(e) {
+    const sql = e.currentTarget.dataset.sql
+    this.setData({ sqlText: sql, showHistoryPanel: false })
+    wx.showToast({ title: '已回填历史SQL', icon: 'none' })
+  },
+
+  // 撤销/重做
   onUndo() {
-    wx.showToast({ title: '撤销', icon: 'none' })
+    const { sqlHistory, historyIndex } = this.data
+    if (historyIndex > 0) {
+      this.setData({
+        sqlText: sqlHistory[historyIndex - 1],
+        historyIndex: historyIndex - 1
+      })
+    }
   },
   onRedo() {
-    wx.showToast({ title: '重做', icon: 'none' })
+    const { sqlHistory, historyIndex } = this.data
+    if (historyIndex < sqlHistory.length - 1) {
+      this.setData({
+        sqlText: sqlHistory[historyIndex + 1],
+        historyIndex: historyIndex + 1
+      })
+    }
   },
+
+  // 清空确认
   onClear() {
-    wx.showToast({ title: '清空', icon: 'none' })
+    this.setData({ showClearConfirm: true })
   },
-  onExecute() {
-    wx.showToast({ title: '执行SQL', icon: 'none' })
+  confirmClear() {
+    this.setData({ sqlText: '', showClearConfirm: false })
+    wx.showToast({ title: '已清空', icon: 'none' })
   },
+  cancelClear() {
+    this.setData({ showClearConfirm: false })
+  },
+
+  // 更多菜单
+  onMore() {
+    this.setData({ showMorePanel: !this.data.showMorePanel })
+  },
+  onShare() {
+    wx.showShareMenu()
+    wx.showToast({ title: '分享', icon: 'none' })
+  },
+  onExport() {
+    wx.showToast({ title: '导出CSV', icon: 'none' })
+    // 实际导出逻辑略
+  },
+
+  // 返回
   onBack() {
     wx.navigateBack()
   },
-  onMore() {
-    wx.showToast({ title: '更多', icon: 'none' })
+
+  // 关闭弹窗
+  closePanel() {
+    this.setData({ showSchemaPanel: false, showHistoryPanel: false, showMorePanel: false, showClearConfirm: false })
   }
 })
