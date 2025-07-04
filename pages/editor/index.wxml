@@ -78,13 +78,14 @@
         <view class="section-header card-header">
           <text class="section-title">执行结果</text>
           <view class="section-actions">
-            <button 
-              class="btn btn-secondary action-btn" 
-              bindtap="onClearResult"
-              wx:if="{{result || error}}"
-            >
-              <text class="action-icon">🗑️</text>
-              清空
+            <button class="btn btn-secondary action-btn" bindtap="copyResult">
+              <text class="icon">📋</text>复制
+            </button>
+            <button class="btn btn-secondary action-btn" bindtap="exportCSV">
+              <text class="icon">📄</text>导出CSV
+            </button>
+            <button class="btn btn-secondary action-btn" bindtap="onClearResult" wx:if="{{result || error}}">
+              <text class="action-icon">🗑️</text>清空
             </button>
           </view>
         </view>

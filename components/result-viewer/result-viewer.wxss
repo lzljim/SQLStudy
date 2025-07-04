@@ -127,32 +127,44 @@
 /* 表格容器 */
 .table-container {
   border: 1rpx solid #e9ecef;
-  border-radius: 8rpx;
+  border-radius: 12rpx;
   overflow: hidden;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+  margin: 0;
 }
 
 .table-scroll {
   max-height: 600rpx;
+  width: 100%;
 }
 
-.result-table {
+.table-wrapper {
   min-width: 100%;
   background: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 表格样式 */
 .table-header {
   display: flex;
-  background: #f8f9fa;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-bottom: 2rpx solid #dee2e6;
   position: sticky;
   top: 0;
   z-index: 1;
+  min-width: 100%;
+}
+
+.table-body {
+  min-width: 100%;
 }
 
 .table-row {
   display: flex;
   border-bottom: 1rpx solid #e9ecef;
+  transition: background-color 0.2s ease;
+  min-width: 100%;
 }
 
 .table-row:nth-child(even) {
@@ -163,14 +175,21 @@
   background: #e3f2fd;
 }
 
+.table-row:last-child {
+  border-bottom: none;
+}
+
 .table-cell {
   flex: 1;
   min-width: 120rpx;
-  padding: 12rpx 16rpx;
+  padding: 16rpx 20rpx;
   border-right: 1rpx solid #e9ecef;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   word-break: break-word;
+  position: relative;
+  box-sizing: border-box;
 }
 
 .table-cell:last-child {
@@ -179,14 +198,54 @@
 
 .header-cell {
   font-weight: 600;
-  color: #495057;
-  background: #e9ecef;
+  color: #fff;
+  background: transparent;
+  font-size: 28rpx;
+  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.1);
 }
 
 .cell-content {
   font-size: 26rpx;
   color: #333;
-  line-height: 1.4;
+  line-height: 1.5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 数字类型数据的特殊样式 */
+.cell-content.number {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  color: #007aff;
+  font-weight: 500;
+}
+
+/* 文本类型数据的特殊样式 */
+.cell-content.text {
+  color: #333;
+}
+
+/* NULL值的特殊样式 */
+.cell-content.null {
+  color: #6c757d;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* 布尔值的特殊样式 */
+.cell-content.boolean {
+  font-weight: 600;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  font-size: 24rpx;
+}
+
+.cell-content.boolean.true {
+  background: #d4edda;
+  color: #155724;
+}
+
+.cell-content.boolean.false {
+  background: #f8d7da;
+  color: #721c24;
 }
 
 /* 空结果状态 */
@@ -279,5 +338,9 @@
   
   .cell-content {
     font-size: 24rpx;
+  }
+  
+  .table-scroll {
+    max-height: 400rpx;
   }
 } 

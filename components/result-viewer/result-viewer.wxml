@@ -22,7 +22,29 @@
 
   <!-- 成功状态 -->
   <view class="success-container" wx:elif="{{result && resultType === 'success'}}">
-    <!-- 统计信息 -->
+    <!-- 数据表格优先显示 -->
+    <view class="table-container" wx:if="{{showTable}}">
+      <scroll-view class="table-scroll" scroll-x="true" scroll-y="true">
+        <view class="table-wrapper">
+          <!-- 表头 -->
+          <view class="table-header">
+            <view class="table-cell header-cell" wx:for="{{result.columns}}" wx:key="col">
+              {{col}}
+            </view>
+          </view>
+          <!-- 表体 -->
+          <view class="table-body">
+            <view class="table-row" wx:for="{{result.data}}" wx:key="rowIdx">
+              <view class="table-cell" wx:for="{{item}}" wx:key="cellIdx">
+                <text class="cell-content">{{item}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 统计信息放在表格下方 -->
     <view class="stats" wx:if="{{showStats}}">
       <view class="stat-item">
         <text class="stat-label">执行时间:</text>
@@ -36,61 +58,6 @@
         <text class="stat-label">列数:</text>
         <text class="stat-value">{{columnCount}}</text>
       </view>
-    </view>
-
-    <!-- 操作按钮 -->
-    <view class="actions">
-      <button class="btn btn-secondary" bindtap="copyResult">
-        <text class="icon">📋</text>
-        复制
-      </button>
-      <button class="btn btn-secondary" bindtap="exportCSV">
-        <text class="icon">📄</text>
-        导出CSV
-      </button>
-      <button class="btn btn-secondary" bindtap="clearResult">
-        <text class="icon">🗑️</text>
-        清空
-      </button>
-    </view>
-
-    <!-- 数据表格 -->
-    <view class="table-container" wx:if="{{showTable}}">
-      <scroll-view class="table-scroll" scroll-x="true" scroll-y="true">
-        <view class="result-table">
-          <!-- 表头 -->
-          <view class="table-header">
-            <view 
-              class="table-cell header-cell" 
-              wx:for="{{result.columns}}" 
-              wx:key="index"
-            >
-              {{item}}
-            </view>
-          </view>
-
-          <!-- 表体 -->
-          <view class="table-body">
-            <view 
-              class="table-row" 
-              wx:for="{{result.data}}" 
-              wx:for-item="row" 
-              wx:for-index="rowIndex" 
-              wx:key="rowIndex"
-            >
-              <view 
-                class="table-cell" 
-                wx:for="{{row}}" 
-                wx:for-item="cell" 
-                wx:for-index="cellIndex" 
-                wx:key="cellIndex"
-              >
-                <text class="cell-content">{{cell}}</text>
-              </view>
-            </view>
-          </view>
-        </view>
-      </scroll-view>
     </view>
   </view>
 

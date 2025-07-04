@@ -136,18 +136,94 @@ Page({
 
   // 执行SQL
   onExecute() {
-    this.setData({ loading: true })
+    const sql = this.data.sqlText.trim()
+    if (!sql) {
+      wx.showToast({
+        title: '请输入SQL语句',
+        icon: 'none'
+      })
+      return
+    }
+
+    this.setData({ loading: true, error: '' })
+    
     setTimeout(() => {
-      // 假设执行SQL并返回结果
+      // 模拟SQL执行结果
+      let result = null
+      let error = ''
+      
+      try {
+        // 根据不同的SQL语句返回不同的模拟结果
+        if (sql.toLowerCase().includes('select * from users')) {
+          result = {
+            columns: ['id', 'name', 'email', 'age', 'city'],
+            data: [
+              [1, '张三', 'zhangsan@example.com', 25, '北京'],
+              [2, '李四', 'lisi@example.com', 30, '上海'],
+              [3, '王五', 'wangwu@example.com', 28, '广州'],
+              [4, '赵六', 'zhaoliu@example.com', 35, '深圳']
+            ],
+            executionTime: 45
+          }
+        } else if (sql.toLowerCase().includes('select * from orders')) {
+          result = {
+            columns: ['id', 'user_id', 'product_name', 'quantity', 'price'],
+            data: [
+              [1, 1, 'iPhone 15', 1, 5999.00],
+              [2, 2, 'MacBook Pro', 1, 12999.00],
+              [3, 1, 'AirPods Pro', 2, 1899.00],
+              [4, 3, 'iPad Air', 1, 4399.00],
+              [5, 4, 'Apple Watch', 1, 2999.00]
+            ],
+            executionTime: 32
+          }
+        } else if (sql.toLowerCase().includes('count')) {
+          result = {
+            columns: ['total'],
+            data: [[4]],
+            executionTime: 15
+          }
+        } else if (sql.toLowerCase().includes('join')) {
+          result = {
+            columns: ['user_name', 'product_name'],
+            data: [
+              ['张三', 'iPhone 15'],
+              ['张三', 'AirPods Pro'],
+              ['李四', 'MacBook Pro'],
+              ['王五', 'iPad Air'],
+              ['赵六', 'Apple Watch']
+            ],
+            executionTime: 67
+          }
+        } else {
+          // 默认返回一个通用的结果
+          result = {
+            columns: ['id', 'name', 'value'],
+            data: [
+              [1, '示例数据1', '值1'],
+              [2, '示例数据2', '值2'],
+              [3, '示例数据3', '值3']
+            ],
+            executionTime: 28
+          }
+        }
+      } catch (err) {
+        error = 'SQL执行出错: ' + err.message
+      }
+      
       this.setData({
         loading: false,
-        result: { rowCount: 2, executionTime: 123, data: [
-          { columns: ['id', 'name'], values: [[1, 'Tom'], [2, 'Jerry']] }
-        ] },
-        error: ''
+        result: result,
+        error: error
       })
-      wx.showToast({ title: '执行成功', icon: 'success' })
-    }, 1200)
+      
+      if (!error) {
+        wx.showToast({ 
+          title: '执行成功', 
+          icon: 'success' 
+        })
+      }
+    }, 800)
   },
 
   // 清空结果
@@ -291,5 +367,14 @@ Page({
   // 关闭弹窗
   closePanel() {
     this.setData({ showSchemaPanel: false, showHistoryPanel: false, showMorePanel: false, showClearConfirm: false })
-  }
+  },
+
+  // 复制结果
+  copyResult() {
+    this.selectComponent('.result-viewer-component').copyResult();
+  },
+  // 导出CSV
+  exportCSV() {
+    this.selectComponent('.result-viewer-component').exportCSV();
+  },
 })

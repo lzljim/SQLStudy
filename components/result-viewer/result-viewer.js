@@ -41,18 +41,10 @@ Component({
   methods: {
     // 格式化数据
     formatData(data) {
-      if (typeof data === 'string') {
-        return data
-      }
-      if (typeof data === 'number') {
-        return data.toString()
-      }
-      if (typeof data === 'boolean') {
-        return data ? 'true' : 'false'
-      }
-      if (data === null || data === undefined) {
-        return 'NULL'
-      }
+      if (typeof data === 'string') return data
+      if (typeof data === 'number') return data.toString()
+      if (typeof data === 'boolean') return data ? 'true' : 'false'
+      if (data === null || data === undefined) return 'NULL'
       return JSON.stringify(data)
     },
 
@@ -72,18 +64,12 @@ Component({
 
     // 生成结果文本
     generateResultText() {
-      if (this.data.error) {
-        return `错误: ${this.data.error}`
-      }
-      
-      if (!this.data.result || !this.data.result.data) {
-        return '无数据'
-      }
-
+      if (this.data.error) return `错误: ${this.data.error}`
+      if (!this.data.result || !this.data.result.data) return '无数据'
       const { columns, data } = this.data.result
-      let text = columns.join('\t') + '\n'
+      let text = columns.join(',') + '\n'
       data.forEach(row => {
-        text += row.map(cell => this.formatData(cell)).join('\t') + '\n'
+        text += row.map(cell => this.formatData(cell)).join(',') + '\n'
       })
       return text
     },
@@ -97,9 +83,8 @@ Component({
         })
         return
       }
-
       const { columns, data } = this.data.result
-      let csv = '\ufeff' // BOM for UTF-8
+      let csv = '\ufeff'
       csv += columns.join(',') + '\n'
       data.forEach(row => {
         csv += row.map(cell => {
@@ -107,11 +92,8 @@ Component({
           return `"${cellStr.replace(/"/g, '""')}"`
         }).join(',') + '\n'
       })
-
-      // 保存文件
       const fs = wx.getFileSystemManager()
       const filePath = `${wx.env.USER_DATA_PATH}/sql_result_${Date.now()}.csv`
-      
       fs.writeFile({
         filePath,
         data: csv,
@@ -123,7 +105,7 @@ Component({
             showCancel: false
           })
         },
-        fail: (err) => {
+        fail: () => {
           wx.showToast({
             title: '导出失败',
             icon: 'none'
@@ -157,9 +139,7 @@ Component({
   observers: {
     'result, error': function(result, error) {
       if (error) {
-        this.setData({
-          resultType: 'error'
-        })
+        this.setData({ resultType: 'error' })
       } else if (result && result.data && result.data.length > 0) {
         this.setData({
           resultType: 'success',
