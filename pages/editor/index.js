@@ -5,34 +5,49 @@ Page({
    * 页面的初始数据
    */
   data: {
-    sqlText: '',
-    sqlHistory: [],
-    historyIndex: -1,
-    showSchemaPanel: false,
-    showHistoryPanel: false,
-    showMorePanel: false,
-    showClearConfirm: false,
-    loading: false,
-    result: null,
-    error: '',
+    sqlText: '', // SQL编辑器输入内容
+    sqlHistory: [], // SQL历史记录
+    historyIndex: -1, // 当前历史索引
+    showSchemaPanel: false, // 是否显示表结构弹窗
+    showHistoryPanel: false, // 是否显示历史SQL弹窗
+    showMorePanel: false, // 是否显示更多菜单
+    showClearConfirm: false, // 是否显示清空确认弹窗
+    loading: false, // SQL执行加载状态
+    result: null, // SQL执行结果对象
+    error: '', // SQL执行错误信息
     // 示例数据库信息
     databaseInfo: {
       name: '示例数据库',
       tables: ['users', 'orders', 'products']
     },
-    // 假设有表结构数据
+    // 表结构数据，供表结构区展示
     tableSchema: [
       { table: 'users', columns: ['id', 'name', 'age'] },
       { table: 'orders', columns: ['id', 'user_id', 'product', 'price'] }
-    ]
+    ],
+    // 练习题分类
+    practiceCategories: ['全部', '高级', '其他'],
+    selectedCategory: '全部',
+    allPracticeList: [
+      { id: 1, title: '基础题1', category: '全部' },
+      { id: 2, title: '高级题1', category: '高级' },
+      { id: 3, title: '其他题1', category: '其他' },
+      // ... 其他题目 ...
+    ],
+    practiceList: [], // 当前分类下的题目列表
+    currentPractice: '' // 当前选中题目
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    // 页面加载时执行
-    this.loadTableSchema()
+    // 页面加载时初始化表结构和练习题列表
+    this.loadTableSchema();
+    this.setData({
+      practiceList: this.data.allPracticeList.map(q => q.title),
+      currentPractice: this.data.allPracticeList.length > 0 ? this.data.allPracticeList[0].title : ''
+    });
   },
 
   /**
@@ -87,9 +102,11 @@ Page({
     }
   },
 
-  // 加载表结构信息
+  /**
+   * 加载表结构信息（可从数据库动态获取）
+   */
   loadTableSchema() {
-    // TODO: 从SQLite获取表结构
+    // 这里用mock数据，实际可从数据库获取
     const mockSchema = [
       {
         table: 'users',
@@ -111,49 +128,44 @@ Page({
           { name: 'price', type: 'DECIMAL(10,2)', nullable: false }
         ]
       }
-    ]
-    
-    this.setData({
-      tableSchema: mockSchema
-    })
+    ];
+    this.setData({ tableSchema: mockSchema });
   },
 
-  // SQL输入事件
+  /**
+   * SQL输入事件，实时更新sqlText
+   */
   onSqlInput(e) {
-    const value = e.detail.value
-    let { sqlHistory, historyIndex } = this.data
+    const value = e.detail.value;
+    let { sqlHistory, historyIndex } = this.data;
     // 只在新输入时追加历史
     if (historyIndex === sqlHistory.length - 1) {
-      sqlHistory.push(value)
-      historyIndex = sqlHistory.length - 1
+      sqlHistory.push(value);
+      historyIndex = sqlHistory.length - 1;
     } else {
-      sqlHistory = sqlHistory.slice(0, historyIndex + 1)
-      sqlHistory.push(value)
-      historyIndex = sqlHistory.length - 1
+      sqlHistory = sqlHistory.slice(0, historyIndex + 1);
+      sqlHistory.push(value);
+      historyIndex = sqlHistory.length - 1;
     }
-    this.setData({ sqlText: value, sqlHistory, historyIndex })
+    this.setData({ sqlText: value, sqlHistory, historyIndex });
   },
 
-  // 执行SQL
+  /**
+   * 执行SQL，模拟SQL.js执行，返回结果或错误
+   */
   onExecute() {
-    const sql = this.data.sqlText.trim()
+    const sql = this.data.sqlText.trim();
     if (!sql) {
-      wx.showToast({
-        title: '请输入SQL语句',
-        icon: 'none'
-      })
-      return
+      wx.showToast({ title: '请输入SQL语句', icon: 'none' });
+      return;
     }
-
-    this.setData({ loading: true, error: '' })
-    
+    this.setData({ loading: true, error: '' });
     setTimeout(() => {
       // 模拟SQL执行结果
-      let result = null
-      let error = ''
-      
+      let result = null;
+      let error = '';
       try {
-        // 根据不同的SQL语句返回不同的模拟结果
+        // 根据不同SQL返回不同模拟结果
         if (sql.toLowerCase().includes('select * from users')) {
           result = {
             columns: ['id', 'name', 'email', 'age', 'city'],
@@ -164,7 +176,7 @@ Page({
               [4, '赵六', 'zhaoliu@example.com', 35, '深圳']
             ],
             executionTime: 45
-          }
+          };
         } else if (sql.toLowerCase().includes('select * from orders')) {
           result = {
             columns: ['id', 'user_id', 'product_name', 'quantity', 'price'],
@@ -176,13 +188,13 @@ Page({
               [5, 4, 'Apple Watch', 1, 2999.00]
             ],
             executionTime: 32
-          }
+          };
         } else if (sql.toLowerCase().includes('count')) {
           result = {
             columns: ['total'],
             data: [[4]],
             executionTime: 15
-          }
+          };
         } else if (sql.toLowerCase().includes('join')) {
           result = {
             columns: ['user_name', 'product_name'],
@@ -194,7 +206,7 @@ Page({
               ['赵六', 'Apple Watch']
             ],
             executionTime: 67
-          }
+          };
         } else {
           // 默认返回一个通用的结果
           result = {
@@ -205,51 +217,68 @@ Page({
               [3, '示例数据3', '值3']
             ],
             executionTime: 28
-          }
+          };
         }
       } catch (err) {
-        error = 'SQL执行出错: ' + err.message
+        error = 'SQL执行出错: ' + err.message;
       }
-      
-      this.setData({
-        loading: false,
-        result: result,
-        error: error
-      })
-      
+      // 控制台打印SQL执行结果和错误，便于调试
+      console.log('SQL执行结果:', result);
+      if (error) {
+        console.error('SQL执行错误:', error);
+      }
+      this.setData({ loading: false, result: result, error: error });
       if (!error) {
-        wx.showToast({ 
-          title: '执行成功', 
-          icon: 'success' 
-        })
+        wx.showToast({ title: '执行成功', icon: 'success' });
       }
-    }, 800)
+    }, 800);
   },
 
-  // 清空结果
+  /**
+   * 清空结果
+   */
   onClearResult() {
-    this.setData({
-      result: null,
-      error: ''
-    })
+    this.setData({ result: null, error: '' });
   },
 
-  // 切换表结构显示
+  /**
+   * 切换表结构显示
+   */
   toggleSchema() {
-    this.setData({
-      showSchema: !this.data.showSchema
-    })
+    this.setData({ showSchema: !this.data.showSchema });
   },
 
-  // 插入表名
+  /**
+   * 插入表名到SQL编辑器
+   */
   insertTableName(e) {
-    const { table } = e.currentTarget.dataset
-    const currentSql = this.data.sqlText
-    const newSql = currentSql + table
-    
+    const { table } = e.currentTarget.dataset;
+    const currentSql = this.data.sqlText;
+    const newSql = currentSql + table;
+    this.setData({ sqlText: newSql });
+  },
+
+  /**
+   * 练习题分类选择事件，筛选题目
+   */
+  onCategoryChange(e) {
+    const idx = e.detail.value;
+    const selectedCategory = this.data.practiceCategories[idx];
+    // 根据分类筛选题目
+    let filtered = this.data.allPracticeList.filter(q => selectedCategory === '全部' || q.category === selectedCategory);
     this.setData({
-      sqlText: newSql
-    })
+      selectedCategory,
+      practiceList: filtered.map(q => q.title),
+      currentPractice: filtered.length > 0 ? filtered[0].title : ''
+    });
+  },
+
+  /**
+   * 练习题选择事件
+   */
+  onPracticeChange(e) {
+    const idx = e.detail.value;
+    this.setData({ currentPractice: this.data.practiceList[idx] });
   },
 
   // 格式化SQL

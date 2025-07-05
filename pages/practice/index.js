@@ -43,7 +43,26 @@ Page({
     pageState: 'list', // 'list', 'detail', 'result'
     
     // 加载状态
-    loading: false
+    loading: false,
+
+    // 练习题分类
+    practiceCategories: ['全部', '高级', '其他'],
+    selectedCategory: '全部',
+    allPracticeList: [
+      { id: 1, title: '基础题1', category: '全部' },
+      { id: 2, title: '高级题1', category: '高级' },
+      { id: 3, title: '其他题1', category: '其他' },
+      // ... 其他题目 ...
+    ],
+    practiceList: [],
+    currentPractice: '',
+    sqlText: '',
+    result: null,
+    error: '',
+    resultType: '',
+    executionTime: 0,
+    rowCount: 0,
+    columnCount: 0
   },
 
   /**
@@ -53,6 +72,10 @@ Page({
     // 页面加载时执行
     this.loadQuestions()
     this.loadUserProgress()
+    this.setData({
+      practiceList: this.data.allPracticeList.map(q => q.title),
+      currentPractice: this.data.allPracticeList.length > 0 ? this.data.allPracticeList[0].title : ''
+    })
   },
 
   /**
@@ -337,5 +360,72 @@ Page({
       showAnswer: false,
       pageState: 'detail'
     })
+  },
+
+  // 分类选择事件
+  onCategoryChange(e) {
+    const idx = e.detail.value;
+    const selectedCategory = this.data.practiceCategories[idx];
+    // 根据分类筛选题目
+    let filtered = this.data.allPracticeList.filter(q => selectedCategory === '全部' || q.category === selectedCategory);
+    this.setData({
+      selectedCategory,
+      practiceList: filtered.map(q => q.title),
+      currentPractice: filtered.length > 0 ? filtered[0].title : ''
+    });
+  },
+
+  // 题目选择事件
+  onPracticeChange(e) {
+    const idx = e.detail.value;
+    this.setData({ currentPractice: this.data.practiceList[idx] });
+  },
+
+  // SQL输入事件，实时更新sqlText
+  onSqlInput(e) {
+    this.setData({ sqlText: e.detail.value });
+  },
+
+  // 执行SQL，模拟执行并返回结果
+  onExecute() {
+    const sql = this.data.sqlText.trim();
+    if (!sql) {
+      wx.showToast({ title: '请输入SQL语句', icon: 'none' });
+      return;
+    }
+    // 这里模拟SQL执行，实际可调用SQL.js等
+    let result = null;
+    let error = '';
+    try {
+      // 简单模拟：只要有select就返回假数据
+      if (sql.toLowerCase().includes('select')) {
+        result = {
+          columns: ['id', 'name'],
+          data: [
+            [1, '张三'],
+            [2, '李四']
+          ],
+          executionTime: 20
+        };
+      } else {
+        error = '仅支持SELECT语句';
+      }
+    } catch (err) {
+      error = 'SQL执行出错: ' + err.message;
+    }
+    // 控制台打印结果，便于调试
+    console.log('SQL执行结果:', result);
+    if (error) {
+      console.error('SQL执行错误:', error);
+    }
+    // 设置结果和错误信息
+    this.setData({
+      result,
+      error,
+      resultType: error ? 'error' : (result && result.data && result.data.length > 0 ? 'success' : 'empty'),
+      executionTime: result ? result.executionTime : 0,
+      rowCount: result ? result.data.length : 0,
+      columnCount: result ? result.columns.length : 0
+    });
   }
 })

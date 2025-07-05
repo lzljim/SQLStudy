@@ -1,13 +1,19 @@
 Page({
+  /**
+   * 页面的初始数据
+   */
   data: {
-    sqlCode: 'SELECT * FROM users LIMIT 5;',
-    result: null,
-    error: null,
-    loading: false,
+    sqlCode: 'SELECT * FROM users LIMIT 5;', // SQL编辑器内容
+    result: null, // SQL执行结果
+    error: null, // 错误信息
+    loading: false, // 加载状态
     db: null,
     isDbInitialized: false
   },
 
+  /**
+   * 生命周期函数--监听页面加载
+   */
   onLoad() {
     this.initSQLite();
   },
@@ -100,14 +106,18 @@ Page({
     }
   },
 
-  // 输入SQL代码
+  /**
+   * SQL输入事件
+   */
   onSqlInput(e) {
     this.setData({
       sqlCode: e.detail.value
     });
   },
 
-  // 执行SQL语句
+  /**
+   * 执行SQL，模拟执行并返回结果
+   */
   executeSQL() {
     if (!this.data.isDbInitialized) {
       this.setData({
@@ -158,7 +168,9 @@ Page({
     }
   },
 
-  // 清空结果
+  /**
+   * 清空结果
+   */
   clearResult() {
     this.setData({
       result: null,

@@ -53,10 +53,10 @@
         <view class="section-header card-header">
           <text class="section-title">SQL编辑器</text>
           <view class="section-actions">
-            <button class="btn btn-secondary action-btn" bindtap="onFormatSQL">
+            <!-- <button class="btn btn-secondary action-btn" bindtap="onFormatSQL">
               <text class="action-icon">⚡</text>
               格式化
-            </button>
+            </button> -->
           </view>
         </view>
         <view class="editor-body">
@@ -66,7 +66,13 @@
                 <text>{{index+1}}</text>
               </block>
             </view>
-            <textarea class="sql-textarea" value="{{sqlText}}" placeholder="请输入SQL语句..." bindinput="onSqlInput" auto-height/>
+            <view class="editor-section">
+              <textarea class="sql-textarea" value="{{sqlText}}" placeholder="请输入SQL语句..." bindinput="onSqlInput" auto-height />
+              <view class="editor-actions">
+                <button type="primary" bindtap="onExecute">执行SQL</button>
+                <!-- <button bindtap="onFormatSQL" style="display:none">格式化</button> -->
+              </view>
+            </view>
           </view>
           <!-- 简易语法高亮（可后续用富文本或三方组件替换） -->
           <!-- <rich-text nodes="{{highlightedSQL}}"></rich-text> -->
@@ -77,17 +83,6 @@
       <view class="card result-card">
         <view class="section-header card-header">
           <text class="section-title">执行结果</text>
-          <view class="section-actions">
-            <button class="btn btn-secondary action-btn" bindtap="copyResult">
-              <text class="icon">📋</text>复制
-            </button>
-            <button class="btn btn-secondary action-btn" bindtap="exportCSV">
-              <text class="icon">📄</text>导出CSV
-            </button>
-            <button class="btn btn-secondary action-btn" bindtap="onClearResult" wx:if="{{result || error}}">
-              <text class="action-icon">🗑️</text>清空
-            </button>
-          </view>
         </view>
         <view class="result-body">
           <result-viewer 
@@ -97,6 +92,26 @@
             error="{{error}}"
             bindclear="onClearResult"
           />
+        </view>
+      </view>
+
+      <!-- 查询结果表格区，标准表头渲染 -->
+      <view class="result-section" wx:if="{{resultType === 'success'}}">
+        <view class="result-header">
+          <text class="result-title">执行结果</text>
+        </view>
+        <scroll-view scroll-x="true" scroll-y="true" class="result-table">
+          <view class="table-header">
+            <text class="table-cell header-cell" wx:for="{{result.columns}}" wx:key="col">{{col}}</text>
+          </view>
+          <view wx:for="{{result.data}}" wx:key="rowIdx" class="table-row">
+            <text class="table-cell" wx:for="{{item}}" wx:key="cellIdx">{{item}}</text>
+          </view>
+        </scroll-view>
+        <view class="result-stats">
+          <text>执行时间: {{executionTime}}ms</text>
+          <text>行数: {{rowCount}}</text>
+          <text>列数: {{columnCount}}</text>
         </view>
       </view>
     </view>
@@ -196,13 +211,3 @@
     </view>
   </view>
 </scroll-view>
-
-<!-- 底部工具栏 -->
-<view class="bottom-toolbar">
-  <button class="toolbar-btn" bindtap="onSchema"><text class="icon">📋</text>表结构</button>
-  <button class="toolbar-btn" bindtap="onHistory"><text class="icon">🕑</text>历史</button>
-  <button class="toolbar-btn" bindtap="onUndo"><text class="icon">↩️</text></button>
-  <button class="toolbar-btn" bindtap="onRedo"><text class="icon">↪️</text></button>
-  <button class="toolbar-btn danger" bindtap="onClear"><text class="icon">🗑️</text>清空</button>
-  <button class="toolbar-btn primary" bindtap="onExecute"><text class="icon">▶️</text>执行SQL</button>
-</view>

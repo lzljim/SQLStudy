@@ -217,5 +217,23 @@
         </button>
       </view>
     </view>
+
+    <view class="top-bar">
+      <button class="nav-btn" open-type="navigateBack">返回</button>
+      <text class="title">SQL练习</text>
+    </view>
+    <view class="practice-section">
+      <picker mode="selector" range="{{practiceCategories}}" bindchange="onCategoryChange">
+        <view class="picker">当前分类：{{selectedCategory}}</view>
+      </picker>
+      <text class="desc">请选择练习题目：</text>
+      <picker mode="selector" range="{{practiceList}}" bindchange="onPracticeChange">
+        <view class="picker">当前题目：{{currentPractice}}</view>
+      </picker>
+      <textarea class="sql-textarea" value="{{sqlText}}" placeholder="请输入SQL语句..." bindinput="onSqlInput" auto-height />
+      <view class="editor-actions">
+        <button type="primary" bindtap="onExecute">执行SQL</button>
+      </view>
+    </view>
   </view>
 </scroll-view>

@@ -114,11 +114,14 @@ class SQLSimpleManager {
 }
 
 Page({
+  /**
+   * 页面的初始数据
+   */
   data: {
-    sqlCode: 'SELECT * FROM users LIMIT 5;',
-    result: null,
-    error: null,
-    loading: false,
+    sqlText: 'SELECT * FROM users LIMIT 5;', // SQL编辑器内容
+    result: null, // SQL执行结果
+    error: '', // 错误信息
+    loading: false, // 加载状态
     sqlManager: null,
     isDbInitialized: false,
     libVersionInfo: null,
@@ -181,70 +184,54 @@ Page({
     }
   },
 
-  // 输入SQL代码
+  /**
+   * SQL输入事件
+   */
   onSqlInput(e) {
-    this.setData({
-      sqlCode: e.detail.value
-    });
+    this.setData({ sqlText: e.detail.value });
   },
 
-  // 执行SQL语句
-  async executeSQL() {
-    if (!this.data.isDbInitialized) {
-      this.setData({
-        error: '数据库未初始化，请稍后再试'
-      });
-      return;
-    }
-
-    const sql = this.data.sqlCode.trim();
+  /**
+   * 执行SQL，模拟执行并返回结果
+   */
+  onExecute() {
+    const sql = this.data.sqlText.trim();
     if (!sql) {
-      this.setData({
-        error: '请输入SQL语句'
-      });
+      wx.showToast({ title: '请输入SQL语句', icon: 'none' });
       return;
     }
-
+    // 这里模拟SQL执行，实际可调用SQL.js等
+    let result = null;
+    let error = '';
     try {
-      this.setData({ 
-        loading: true, 
-        error: null, 
-        result: null 
-      });
-
-      const result = await this.data.sqlManager.executeSQL(sql);
-
-      if (result.success) {
-        this.setData({
-          result: {
-            data: result.data,
-            executionTime: result.executionTime,
-            rowCount: result.data.length > 0 ? result.data[0].values.length : 0
-          },
-          loading: false
-        });
+      if (sql.toLowerCase().includes('select')) {
+        result = {
+          columns: ['id', 'name'],
+          data: [
+            [1, 'Tom'],
+            [2, 'Jerry']
+          ],
+          executionTime: 10
+        };
       } else {
-        this.setData({
-          error: 'SQL执行失败: ' + result.error,
-          loading: false
-        });
+        error = '仅支持SELECT语句';
       }
-
-    } catch (error) {
-      console.error('SQL执行失败:', error);
-      this.setData({
-        error: 'SQL执行失败: ' + error.message,
-        loading: false
-      });
+    } catch (err) {
+      error = 'SQL执行出错: ' + err.message;
     }
+    // 控制台打印结果，便于调试
+    console.log('SQL执行结果:', result);
+    if (error) {
+      console.error('SQL执行错误:', error);
+    }
+    this.setData({ result, error });
   },
 
-  // 清空结果
-  clearResult() {
-    this.setData({
-      result: null,
-      error: null
-    });
+  /**
+   * 清空结果
+   */
+  onClearResult() {
+    this.setData({ result: null, error: '' });
   },
 
   // 重置数据库
@@ -311,7 +298,7 @@ Page({
   setExample(e) {
     const sql = e.currentTarget.dataset.sql;
     this.setData({
-      sqlCode: sql
+      sqlText: sql
     });
   },
 
