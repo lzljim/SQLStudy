@@ -73,24 +73,18 @@
             data-id="{{item.id}}"
             bindtap="viewQuestion"
           >
-            <view class="question-header">
-              <view class="question-info">
-                <text class="question-title">{{item.title}}</text>
-                <view class="question-meta">
-                  <text class="difficulty difficulty-{{item.difficulty}}">
-                    {{item.difficulty === 1 ? '简单' : item.difficulty === 2 ? '中等' : '困难'}}
-                  </text>
-                  <text class="category-tag">{{item.category === 'basic' ? '基础' : item.category === 'advanced' ? '高级' : item.category === 'join' ? '关联' : '聚合'}}</text>
-                </view>
-              </view>
-              <view class="question-status">
-                <text wx:if="{{item.completed}}" class="status-icon {{item.correct ? 'correct' : 'incorrect'}}">
-                  {{item.correct ? '✓' : '✗'}}
+            <view class="question-row">
+              <text class="question-title">{{item.title}}</text>
+              <view class="question-tags">
+                <text class="tag difficulty-{{item.difficulty}}">
+                  {{item.difficulty === 1 ? '简单' : item.difficulty === 2 ? '中等' : '困难'}}
                 </text>
-                <text wx:else class="status-icon pending">○</text>
+                <text class="tag status-{{item.completed ? (item.correct ? 'correct' : 'incorrect') : 'pending'}}">
+                  {{item.completed ? (item.correct ? '✓' : '✗') : '○'}}
+                </text>
               </view>
             </view>
-            <view class="question-desc">{{item.description}}</view>
+            <text class="question-desc single-line">{{item.description}}</text>
           </view>
         </view>
       </view>
@@ -98,75 +92,19 @@
 
     <!-- 题目详情页面 -->
     <view class="detail-page" wx:if="{{pageState === 'detail'}}">
-      <view class="detail-header">
-        <button class="back-btn" bindtap="backToList">
-          <text class="back-icon">←</text>
-          返回列表
-        </button>
-        <text class="detail-title">题目详情</text>
+      <view class="detail-header-simple">
+        <text class="back-icon" bindtap="backToList">←</text>
+        <text class="detail-title">{{currentQuestion.title}}</text>
       </view>
-
-      <view class="question-detail card">
-        <view class="question-header">
-          <text class="question-title">{{currentQuestion.title}}</text>
-          <view class="question-meta">
-            <text class="difficulty difficulty-{{currentQuestion.difficulty}}">
-              {{currentQuestion.difficulty === 1 ? '简单' : currentQuestion.difficulty === 2 ? '中等' : '困难'}}
-            </text>
-          </view>
+      <view class="practice-detail card">
+        <view class="practice-desc">{{currentQuestion.description}}</view>
+        <textarea class="practice-input" value="{{userAnswer}}" placeholder="请输入SQL语句..." bindinput="onAnswerInput" auto-height />
+        <view class="practice-actions">
+          <button class="btn-primary" bindtap="submitAnswer">提交</button>
+          <button class="btn-link" bindtap="showAnswer">参考答案</button>
         </view>
-        
-        <view class="question-content">
-          <text class="question-desc">{{currentQuestion.description}}</text>
-          
-          <!-- 提示信息 -->
-          <view class="hints-section" wx:if="{{currentQuestion.hints.length > 0}}">
-            <text class="hints-title">💡 提示</text>
-            <view class="hints-list">
-              <text 
-                class="hint-item" 
-                wx:for="{{currentQuestion.hints}}" 
-                wx:key="index"
-              >
-                {{index + 1}}. {{item}}
-              </text>
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <!-- 答题区域 -->
-      <view class="answer-section card">
-        <view class="answer-header">
-          <text class="answer-title">你的答案</text>
-        </view>
-        
-        <sql-editor 
-          class="answer-editor"
-          value="{{userAnswer}}"
-          placeholder="请输入SQL语句..."
-          height="200rpx"
-          bindinput="onAnswerInput"
-        />
-        
-        <view class="answer-actions">
-          <button class="btn btn-secondary" bindtap="showAnswer">
-            <text class="btn-icon">👁️</text>
-            查看答案
-          </button>
-          <button class="btn btn-primary" bindtap="submitAnswer">
-            <text class="btn-icon">✓</text>
-            提交答案
-          </button>
-        </view>
-      </view>
-
-      <!-- 答案展示 -->
-      <view class="answer-display card" wx:if="{{showAnswer}}">
-        <view class="answer-display-header">
-          <text class="answer-display-title">参考答案</text>
-        </view>
-        <view class="answer-display-content">
+        <view class="practice-answer" wx:if="{{showAnswer}}">
+          <text class="answer-label">参考答案：</text>
           <text class="answer-sql">{{currentQuestion.sql}}</text>
           <text class="answer-explanation">{{currentQuestion.explanation}}</text>
         </view>

@@ -67,10 +67,10 @@
             class="example-item" 
             wx:for="{{quickStartExamples}}" 
             wx:key="index"
-            data-sql="{{item}}"
+            data-sql="{{item.sql}}"
             bindtap="copyExample"
           >
-            <text class="example-sql">{{item}}</text>
+            <text class="example-sql">{{item.sql}}</text>
             <text class="copy-icon">📋</text>
           </view>
         </view>

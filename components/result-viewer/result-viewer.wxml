@@ -28,8 +28,8 @@
         <view class="table-wrapper">
           <!-- 表头 -->
           <view class="table-header">
-            <view class="table-cell header-cell" wx:for="{{result.columns}}" wx:key="col">
-              {{col}}
+            <view class="table-cell header-cell" wx:for="{{tableData.columns}}" wx:key="index">
+              {{item.name}}
             </view>
           </view>
           <!-- 表体 -->

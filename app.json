@@ -8,10 +8,12 @@
   "workers": "workers",
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTitleText": "SQL学习助手",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#f8f8f8"
+    "backgroundColor": "#f8f9fa",
+    "enablePullDownRefresh": false,
+    "onReachBottomDistance": 50
   },
   "style": "v2",
   "renderer": "skyline",
@@ -27,5 +29,21 @@
   },
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "requiredBackgroundModes": [],
+  "plugins": {},
+  "preloadRule": {
+    "pages/index/index": {
+      "network": "all",
+      "packages": ["pages/editor/index"]
+    }
+  },
+  "resizable": false,
+  "darkmode": false,
+  "themeLocation": "theme.json"
 }

@@ -8,10 +8,8 @@ Page({
     // 题目分类
     categories: [
       { id: 'all', name: '全部', count: 0 },
-      { id: 'basic', name: '基础查询', count: 0 },
-      { id: 'advanced', name: '高级查询', count: 0 },
-      { id: 'join', name: '关联查询', count: 0 },
-      { id: 'aggregate', name: '聚合函数', count: 0 }
+      { id: 'basic', name: '基础', count: 0 },
+      { id: 'advanced', name: '高级', count: 0 }
     ],
     
     // 当前选中的分类
@@ -46,7 +44,7 @@ Page({
     loading: false,
 
     // 练习题分类
-    practiceCategories: ['全部', '高级', '其他'],
+    practiceCategories: ['全部', '基础', '高级'],
     selectedCategory: '全部',
     allPracticeList: [
       { id: 1, title: '基础题1', category: '全部' },
